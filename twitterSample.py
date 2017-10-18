@@ -9,6 +9,8 @@ import os
 from twython import Twython, TwythonError
 from datetime import datetime
 
+import s3Uploader
+
 def tweet():
 
 	config = configparser.ConfigParser()
@@ -40,9 +42,18 @@ def tweet():
 		image_io.seek(0)
 
 	try:
-		formattedDateTime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+
+		dt = datetime.now()
+
+		formattedDateTime = dt.strftime("%Y/%m/%d %H:%M:%S")
 		image_ids = twitter.upload_media(media=image_io)
-		twitter.update_status(status="Captured at {time}".format(time=datetime.now().strftime("%Y/%m/%d %H:%M:%S")), media_ids=[image_ids['media_id']])
+		twitter.update_status(status="Captured at {time}".format(time=formattedDateTime), media_ids=[image_ids['media_id']])
+
+		# Upload object to S3
+		bucketName = 'bun-chan-bot-images'
+		objectName = "image_{name}.jpg".format(name=dt.strftime("%Y%m%d_%H%M%S"))
+		uploader = s3Uploader.s3Uploader(bucketName, objectName, './image.jpg')
+		uploader.upload()
 	
 	except TwythonError as e:
 		print(e)
