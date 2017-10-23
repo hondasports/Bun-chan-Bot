@@ -28,6 +28,7 @@ def tweet():
 	#	print(e)
 
 	image_io = None
+	imageFileName = os.path.dirname(os.path.abspath(__file__)) + '/image.jpg'
 	try:
 		subprocess.run('fswebcam -F 1 -S 20 -r 640x480 ' + os.path.dirname(os.path.abspath(__file__)) +  '/image.jpg', shell=True, check=True)
 
@@ -35,7 +36,7 @@ def tweet():
 		print(e)
 
 	else:
-		photo = Image.open(os.path.dirname(os.path.abspath(__file__)) + '/image.jpg');
+		photo = Image.open(imageFileName);
 		image_io = io.BytesIO()
 		photo.save(image_io, format='JPEG')
 
@@ -51,8 +52,8 @@ def tweet():
 
 		# Upload object to S3
 		bucketName = 'bun-chan-bot-images'
-		objectName = "image_{name}.jpg".format(name=dt.strftime("%Y%m%d_%H%M%S"))
-		uploader = s3Uploader.s3Uploader(bucketName, objectName, './image.jpg')
+		objectName = "{name}.jpg".format(name=dt.strftime("%Y/%m/%d/%H%M%S"))
+		uploader = s3Uploader.s3Uploader(bucketName, objectName, imageFileName)
 		uploader.upload()
 	
 	except TwythonError as e:
