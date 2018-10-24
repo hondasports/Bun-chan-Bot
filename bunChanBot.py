@@ -48,7 +48,7 @@ def tweet():
 
 		formattedDateTime = dt.strftime("%Y/%m/%d %H:%M:%S")
 		image_ids = twitter.upload_media(media=image_io)
-		twitter.update_status(status="Captured at {time}".format(time=formattedDateTime), media_ids=[image_ids['media_id']])
+		twitter.update_status(status="Captured at {time} #文鳥".format(time=formattedDateTime), media_ids=[image_ids['media_id']])
 
 		# Upload object to S3
 		bucketName = 'bun-chan-bot-images'
