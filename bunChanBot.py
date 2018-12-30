@@ -30,7 +30,7 @@ def tweet():
 	image_io = None
 	imageFileName = os.path.dirname(os.path.abspath(__file__)) + '/image.jpg'
 	try:
-		subprocess.run('fswebcam -F 1 -S 20 -r 640x480 ' + os.path.dirname(os.path.abspath(__file__)) +  '/image.jpg', shell=True, check=True)
+		subprocess.run('fswebcam -F 1 -S 20 -r 1920×1080 ' + os.path.dirname(os.path.abspath(__file__)) +  '/image.jpg', shell=True, check=True)
 
 	except subprocess.CalledProcessError as e:
 		print(e)
